@@ -1,0 +1,7 @@
+name = "DistanceEnsembles"
+uuid = "6a7379cd-b1d5-4297-ac04-68cc5d7dcd57"
+authors = ["mr1214 "]
+version = "0.1.0"
+
+[deps]
+AverageShiftedHistograms = "77b51b56-6f8f-5c3a-9cb4-d71f9594ea6e"

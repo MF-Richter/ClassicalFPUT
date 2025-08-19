@@ -1,0 +1,7 @@
+name = "EvolveEnsemble"
+uuid = "fa8216c5-222a-496a-b423-11011a2c810c"
+authors = ["mr1214 "]
+version = "0.1.0"
+
+[deps]
+DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"

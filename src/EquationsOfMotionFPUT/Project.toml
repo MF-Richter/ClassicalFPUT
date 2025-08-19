@@ -1,0 +1,7 @@
+name = "EquationsOfMotionFPUT"
+uuid = "91c357d2-3f2d-4253-942f-304fb5d64577"
+authors = ["mr1214 "]
+version = "0.1.0"
+
+[deps]
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"

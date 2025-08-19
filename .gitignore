@@ -1,0 +1,34 @@
+# Ignore Julia package environments and compiled artifacts
+/.julia/
+/Manifest.toml
+/artifacts/
+/deps/
+
+# Ignore Julia REPL history and notebook checkpoints
+.julia_history
+.julia_backup
+*.ipynb_checkpoints
+
+# Ignore data, results, and cache directories (customize as needed)
+data/
+results/
+cache/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Your custom ignores
+data/
+test/
+Instantiate_ClassicalFPUT.jl
+intro.jl
+PkgInstallations.jl
+TEST_script.jl
+scripts/playground.jl
+
+# Ignore editor/project files (optional, for common editors)
+.vscode/
+.idea/
+*.swp
+*~

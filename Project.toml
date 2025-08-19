@@ -1,0 +1,24 @@
+name = "ClassicalFPUT"
+authors = ["Moritz F. Richter"]
+
+[deps]
+PhaseSpaceMoments = "5af13e0b-d75b-4005-9d83-b46f49586f24"
+CorrelationEnsemble = "dfe58d9a-a7f3-4c78-8a15-f94f23ba7c2d"
+DiffEqPhysics = "055956cb-9e8b-5191-98cc-73ae4a59e68a"
+DistanceEnsembles = "6a7379cd-b1d5-4297-ac04-68cc5d7dcd57"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
+EnergySplitting = "bf9dfb83-eab7-4761-9654-3c7eb632b5f2"
+EquationsOfMotionFPUT = "91c357d2-3f2d-4253-942f-304fb5d64577"
+EvolveEnsemble = "fa8216c5-222a-496a-b423-11011a2c810c"
+JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+MakeEnsemble = "bd5374bd-55e5-4d91-9b0a-7136d93dc370"
+NormalModes = "b7c42d0d-efce-4848-8528-ea264e8d62c9"
+OrdinaryDiffEq = "1dea7af3-3e70-54e6-95c3-0bf5283fa5ed"
+PyPlot = "d330b81b-6aea-500a-939a-2ce795aea3ee"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[compat]
+DrWatson = "2.18.0"
+julia = "1.10.6"
