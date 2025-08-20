@@ -9,8 +9,7 @@
 .julia_backup
 *.ipynb_checkpoints
 
-# Ignore data, results, and cache directories (customize as needed)
-data/
+# Ignore results, and cache directories (customize as needed)
 results/
 cache/
 
@@ -26,11 +25,15 @@ PkgInstallations.jl
 TEST_script.jl
 scripts/playground.jl
 
-# Ignore everything in the data folder...
-data/*
+# Ignore everything in the subfolder of data...
+data/DblEnsembles/*
+data/Ensembles/*
+data/Trajectories/*
 
 # ...except .gitkeep files in any subfolder
-!data/**/.gitkeep
+!data/DblEnsembles/.gitkeep
+!data/Ensembles/.gitkeep
+!data/Trajectories/.gitkeep
 
 # Ignore editor/project files (optional, for common editors)
 .vscode/
