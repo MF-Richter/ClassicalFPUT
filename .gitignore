@@ -19,14 +19,18 @@ cache/
 Thumbs.db
 
 # Your custom ignores
-data/*
-!data/**/.gitkeep
 test/
 Instantiate_ClassicalFPUT.jl
 intro.jl
 PkgInstallations.jl
 TEST_script.jl
 scripts/playground.jl
+
+# Ignore everything in the data folder...
+data/*
+
+# ...except .gitkeep files in any subfolder
+!data/**/.gitkeep
 
 # Ignore editor/project files (optional, for common editors)
 .vscode/
