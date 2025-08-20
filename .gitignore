@@ -19,7 +19,8 @@ cache/
 Thumbs.db
 
 # Your custom ignores
-data/
+data/*
+!data/**/.gitkeep
 test/
 Instantiate_ClassicalFPUT.jl
 intro.jl
