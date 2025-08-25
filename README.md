@@ -45,13 +45,11 @@ which auto-activate the project and enable local path handling from DrWatson.
 
 
 ## Acknowledgments
-
 This work has been supported by the German Research Foundation (DFG) through FOR 5099.
 
 
 ## Data Availability
-
-- “Raw data not included. Please request from author.”
+Raw data not included. Please request from author.
 
 
 ## References
@@ -69,5 +67,8 @@ This work has been supported by the German Research Foundation (DFG) through FOR
 
 
 ## License
-
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
+## Release Note
+This is still a beta version. The Documentation and single commend in the code are still work in progress
