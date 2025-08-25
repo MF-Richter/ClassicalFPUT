@@ -8,7 +8,7 @@ $V(\Delta q) = \frac{\kappa}{2}\Delta q^2 + \frac{\alpha}{3!}\Delta q^3 + \frac{
 
 i.e. a harmonic chain of coupling strength $\kappa$ with some anharmonic perturbation of strength $\alpha$ and $\beta$. FPUT studied this chain originally in context energy sharing between its normal modes to test the ergodicity hypothesis (which in fact they found not to be fulfilled for this model)[1].
 
-[ClassicalFPUT](https://github.com/MF-Richter/ClassicalFPUT) allows to construct such FPUT chains of arbitrary length and coupling strengths and to initialize them either locally, i.e. excite a single site, or in a normal mode, i.e. an ordered collective excitation of the whole chain. Additionally, it is possible to excite the chain not just in a single state but in an ensemble, i.e. an arbitrary number of initial states distributed in phase-space according to a Gaussian distribution defined by its displacement vector and covariance matrix. [ClassicalFPUT](https://github.com/MF-Richter/ClassicalFPUT) further provides modules to compute from such states and state trajectories information flow, correlations, phase-space means, energy splitting between sites and normal modes ect.
+[ClassicalFPUT](https://github.com/MF-Richter/ClassicalFPUT) allows to construct such FPUT chains of arbitrary length and coupling strengths and to initialize them either locally, i.e. excite a single site, or in a normal mode, i.e. an ordered collective excitation of the whole chain. Additionally, it is possible to excite the chain not just in a single state but in an ensemble, i.e. an arbitrary number of initial states distributed in phase-space according to a Gaussian distribution defined by its displacement vector and covariance matrix. The initial states are evolved by solving the Hamiltonian equations of motion using the package [DifferentialEquations](https://github.com/SciML/DifferentialEquations.jl). [ClassicalFPUT](https://github.com/MF-Richter/ClassicalFPUT) further provides modules to compute from such states and state trajectories information flow, correlations, phase-space means, energy splitting between sites and normal modes ect.
 
 To study the information flow through a FPUT chain and the effects of anharmonic coupling to it [QuantumFPUT](https://github.com/MF-Richter/QuantumFPUT) uses the Breuer-Laine-Piilo (BLP) measure based on the trace distance between quantum density operators [2,3,4], while [ClassicalFPUT](https://github.com/MF-Richter/ClassicalFPUT) uses the classical limit of the BLP measure based on the Kolmogorov distance between phase-space distributions [5,6]. The phase-space distributions can be approximated by initializing the chain in an ensemble as described above.
 
@@ -16,7 +16,6 @@ To study the information flow through a FPUT chain and the effects of anharmonic
 
 ## Author
 - Moritz F. Richter
-
 
 
 ## Installation & Setup
@@ -45,9 +44,15 @@ using DrWatson
 which auto-activate the project and enable local path handling from DrWatson.
 
 
+## Acknowledgments
+
+This work has been supported by the German Research Foundation (DFG) through FOR 5099.
+
+
 ## Data Availability
 
 - “Raw data not included. Please request from author.”
+
 
 ## References
 [1] S. Ulam (and M. Tsingou) E. fermi, J. Pasta. Studies of nonlinear problems. Los Alamos Report, (LA-1940), 1955.
@@ -61,6 +66,7 @@ which auto-activate the project and enable local path handling from DrWatson.
 [5] Moritz Ferdinand Richter, Raphael Wiedenmann, and Heinz-Peter Breuer. Witnessing non-markovianity by quantum quasi-probability distributions. New Journal of Physics, 2022.
 
 [6] Moritz F. Richter and Heinz-Peter Breuer. Phase-space measures of information flow in open systems: A quantum and classical perspective of non-markovianity. Phys. Rev. A, 110:062401, Dec 2024.
+
 
 ## License
 
