@@ -4,9 +4,7 @@
 
 The FPUT chain was firstly simulated by Enrico Fermi, John Pasta, Stanislaw Ulam and Mary Tsingou and consist of oscillating particles coupled to their nearest neighbors by the potential
 
-$
-V(\Delta q) = \frac{\kappa}{2}\Delta q^2 \ + \ \frac{\alpha}{3!}\Delta q^3 \ + \ \frac{\beta}{4!}\Delta q^4,
-$
+$V(\Delta q) = \frac{\kappa}{2}\Delta q^2 + \frac{\alpha}{3!}\Delta q^3 + \frac{\beta}{4!}\Delta q^4$
 
 i.e. a harmonic chain of coupling strength $\kappa$ with some anharmonic perturbation of strength $\alpha$ and $\beta$. FPUT studied this chain originally in context energy sharing between its normal modes to test the ergodicity hypothesis (which in fact they found not to be fulfilled for this model)[1].
 
