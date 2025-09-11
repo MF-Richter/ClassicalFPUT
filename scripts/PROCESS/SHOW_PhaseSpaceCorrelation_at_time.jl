@@ -16,7 +16,7 @@ include(srcdir("Sorting_Coordinates.jl"))
 # folder = "DblEnsembles"
 
 filename1 = "LocMo_HPC+__N=2_α=0.0_β=0.2_kbT=0.0_γ=0.0_n_traj=10000000.jld2"
-filename2 = "LocMo_HPC+__N=2_α=0.0_β=0.2_kbT=0.0_γ=0.0_n_traj=10000000.jld2"
+filename2 = "LocMo_HPC-__N=2_α=0.0_β=0.2_kbT=0.0_γ=0.0_n_traj=10000000.jld2"
 folder = "Ensembles"
 
 qrange = LinRange(-5, 5, 300)
@@ -25,7 +25,7 @@ prange = LinRange(-5, 5, 300)
 PlotSites = [1,2]
 
 # Time or index of plotting
-τ = 9
+τ = 1
 # epsilons = [0.1, 0.3, 0.5, 0.7, 0.9, 1.1, 1.3, 1.5, 1.7]
 # epsilons = [1.0, 0.5, 0.25]
 epsilons = [0.25]

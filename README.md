@@ -2,11 +2,11 @@
 
 [ClassicalFPUT](https://github.com/MF-Richter/ClassicalFPUT) is a julia project that together with its twin project [QuantumFPUT](https://github.com/MF-Richter/QuantumFPUT) is written to investigate quantum and classical information flow through FPUT chains.
 
-The FPUT chain was firstly simulated by Enrico Fermi, John Pasta, Stanislaw Ulam and Mary Tsingou and consist of oscillating particles coupled to their nearest neighbors by the potential
+The FPUT chain was firstly simulated by Enrico Fermi, John Pasta, Stanislaw Ulam and Mary Tsingou and consists of oscillating particles coupled to their nearest neighbors by the potential
 
 $V(\Delta q) = \frac{\kappa}{2}\Delta q^2 + \frac{\alpha}{3!}\Delta q^3 + \frac{\beta}{4!}\Delta q^4$
 
-i.e. a harmonic chain of coupling strength $\kappa$ with some anharmonic perturbation of strength $\alpha$ and $\beta$. FPUT studied this chain originally in context energy sharing between its normal modes to test the ergodicity hypothesis (which in fact they found not to be fulfilled for this model)[1].
+i.e. a harmonic chain of coupling strength $\kappa$ with some anharmonic perturbation of strength $\alpha$ and $\beta$. FPUT studied this chain originally in the context of energy sharing between its normal modes to test the ergodicity hypothesis (which in fact they found not to be fulfilled for this model[1]).
 
 [ClassicalFPUT](https://github.com/MF-Richter/ClassicalFPUT) allows to construct such FPUT chains of arbitrary length and coupling strengths and to initialize them either locally, i.e. excite a single site, or in a normal mode, i.e. an ordered collective excitation of the whole chain. Additionally, it is possible to excite the chain not just in a single state but in an ensemble, i.e. an arbitrary number of initial states distributed in phase-space according to a Gaussian distribution defined by its displacement vector and covariance matrix. The initial states are evolved by solving the Hamiltonian equations of motion using the package [DifferentialEquations](https://github.com/SciML/DifferentialEquations.jl). [ClassicalFPUT](https://github.com/MF-Richter/ClassicalFPUT) further provides modules to compute from such states and state trajectories information flow, correlations, phase-space means, energy splitting between sites and normal modes ect.
 
@@ -19,6 +19,7 @@ To study the information flow through a FPUT chain and the effects of anharmonic
 
 
 ## Installation & Setup
+Since the plotting is done by [PyPlot](https://github.com/JuliaPy/PyPlot.jl), make sure that you have a stable version of matplotlib.pyplot for python installed.
 
 This code base is using the [Julia Language](https://julialang.org/) and [DrWatson](https://juliadynamics.github.io/DrWatson.jl/stable/) to make a reproducible scientific project named
 To (locally) reproduce this project, do the following:
