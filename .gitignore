@@ -29,11 +29,13 @@ scripts/playground.jl
 data/DblEnsembles/*
 data/Ensembles/*
 data/Trajectories/*
+data/Correlations/*
 
 # ...except .gitkeep files in any subfolder
 !data/DblEnsembles/.gitkeep
 !data/Ensembles/.gitkeep
 !data/Trajectories/.gitkeep
+!data/Correlations/.gitkeep
 
 # Ignore editor/project files (optional, for common editors)
 .vscode/

@@ -12,7 +12,7 @@ include(srcdir("Sorting_Coordinates.jl"))
 ##########  Enter File Name and Plot parameters   ##########
 ############################################################
 
-filename = "LocOsc__N=2_α=0.2_β=0.0_n_traj=10000.jld2"
+filename = "LocOsc_TEST_N=2_α=0.0_β=0.0_n_traj=10000.jld2"
 folder   = "Ensembles"
 
 qrange = LinRange(-5, 5, 100)

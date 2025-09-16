@@ -1,27 +1,30 @@
 """
-With this script one can compute a single trajectory for a Fermi-Pasta-Ulam-Tsingou (FPUT) chain,
-i.e. a chain of N oscillators coupled position wise to their next neighbor via the coupling poten-
-tial
+With this script, one can compute a single trajectory for a Fermi-Pasta-Ulam-Tsingou (FPUT) chain,
+i.e., a chain of N oscillators coupled position-wise to their next neighbor via the coupling potential
 
-V(x) = κ*x²/2! + α*x³/3! + β*x⁴/4!
+V(x) = κx²/2! + αx³/3! + β*x⁴/4!
 
-i.e. by a harmonic term with strength κ and unharmonic couplings of strength α and β with fixed
-boundry contitions (the 1st and the N-th oscillator are coupled to a imagined 0th and (N+1)th osc.
-with is forced to stay at rest).
-In our setting we assume one osc. to be the actual system of interest (by defoult the 1st) and the
-remaining osc. are interpreted as environment. The trajectory is initiated by an initial point in
-phase-space. The coordinates of the system osc. are given by displacemnt 'μS' while the coordinates
-of the environmental osc. are displacement 'μE'. If the chain should not be initiated by local osc.
-one can simply define a arbitrary vector μ = [q1,p1, ... , qN,pN]. Furthermore, we implemented a
-keyword such that the first oscilator is interpreted as first normal mode of the harmonic chain ect.
-Thus, the excitement of the first oscilator becomes the excitement of the first normal mode and the
-chain starts in a collective oscillation instead of a local one.
-Additionally one can attache a thermal bath to one oscillator, resulting in a dissipative term in
-the Hamiltonian equations of motion and a stochastic Fluctuation term. This two initial terms are
+i.e., by a harmonic term with strength κ and unharmonic couplings of strength α and β with fixed
+boundary conditions (the 1st and the N-th oscillator are coupled to an imagined 0th and (N+1)th
+oscillator that is forced to stay at rest).
+
+In our setting, we assume one oscillator to be the actual system of interest (by default the 1st)
+and the remaining oscillators are interpreted as the environment. The trajectory is initiated by
+an initial point in phase-space. The coordinates of the system oscillator are given by displacement
+'μS', while the coordinates of the environmental oscillators are displacement 'μE'. If the chain
+should not be initiated by local oscillators, one can simply define an arbitrary vector
+μ = [q1,p1, ..., qN,pN]. Furthermore, we implemented a keyword such that the first oscillator is
+interpreted as the first normal mode of the harmonic chain, etc. Thus, the excitation of the first
+oscillator becomes the excitation of the first normal mode, and the chain starts in a collective
+oscillation instead of a local one.
+
+Additionally, one can attach a thermal bath to one oscillator, resulting in a dissipative term in
+the Hamiltonian equations of motion and a stochastic fluctuation term. These two terms are
 connected by the Fluctuation-Dissipation Theorem. If the temperature is set to zero and thus no
-fluctuation is taking place the time evolution is solved as ordinary differential equation by the
-ODE solver of DifferentialEquations.jl, otherwise a stochastic differential equation has to be
-solved with a SDE solver.
+fluctuation is taking place, the time evolution is solved as an ordinary differential equation by the
+ODE solver of DifferentialEquations.jl; otherwise, a stochastic differential equation has to be
+solved with an SDE solver.
+
 The trajectory is saved by a name containing the parameters and an optional prefix as a .jld2 file
 in the data/Trajectory folder.
 """
@@ -37,12 +40,9 @@ using DrWatson
 # μS... initial phase-space displacement of the system (first oscillator)
 # μS... initial phase-space displacement of the environment (oscillators 2 to N)
 r = 2.0
-θ = +0.5*pi
+θ = 0.5*pi
 
-δr = 0.00
-δθ = 0.00
-
-μS = (r+δr) * [cos(θ+δθ), sin(θ+δθ)]
+μS = r * [cos(θ), sin(θ)]
 μE = [0.0, 0.0]
 
 # choose, if the subsystems should be interpreted as normal modes of the harmonic chain
@@ -55,14 +55,14 @@ mode = 1
 # t_end...  end time
 # n_time... number of time steps
 t_0    = 0.0
-t_end  = 1000.0
-n_time = 10000
+t_end  = 100.0
+n_time = 1000
 
 
 ## Parameters of the FPUT Dynamic:
 # N... number of oscillators in the chain
 # coupling potential V(x) = κ*x²/2! + α*x³/3! + β*x⁴/4!
-N = 32
+N = 10
 κ = 1.0
 α = 0.5
 β = 0.0

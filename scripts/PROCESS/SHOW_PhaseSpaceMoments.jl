@@ -6,7 +6,7 @@ using DrWatson
 ##########  Enter File Name and Plot parameters   ##########
 ############################################################
 
-filename = "Dbl_LocOsc_SHORT_N=4_α=0.0_β=0.0_n_traj=10000.jld2"
+filename = "LocOsc_TEST_N=2_α=0.0_β=0.0_n_traj=10000.jld2"
 
 colorlist = ["lightcoral", "midnightblue", "mediumvioletred"]
 
@@ -29,7 +29,7 @@ trajectories = load(datadir("DblEnsembles", filename), "states1")
 sorting      = load(datadir("DblEnsembles", filename), "sorting")
 println(sorting)
 
-t_start, t_end = first(periods), 20.0 # last(periods)
+t_start, t_end = first(periods), last(periods)
 n_times = length(periods)
 
 

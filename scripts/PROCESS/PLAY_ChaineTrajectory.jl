@@ -1,6 +1,8 @@
 """
 This script loads some single trajectory from the data/Trajectoriers and displays the position displacement
-of each oscillator, i.e. the motion of the chain. 
+of each oscillator, i.e. the motion of the chain.
+Note, that the coordinates need to be sorted combined, i.e. first all momentum coordinates
+followed by all position coordinates.
 """
 
 
@@ -14,7 +16,7 @@ include(srcdir("Sorting_Coordinates.jl"))
 ############################################################
 
 folder = "Trajectories"
-filename = "SHOW-NoMo_N=10_α=1.0_β=0.0_kbT=0.0_γ=0.0_mode=1.jld2"
+filename = "FPUTeffect_N=10_α=0.5_β=0.0_kbT=0.0_γ=0.0_mode=1.jld2"
 
 
 
@@ -37,7 +39,7 @@ using JLD2
 
 parameters  = load(datadir(folder, filename), "parameters")
 periods     = load(datadir(folder, filename), "periods")
-trajectory  = load(datadir(folder, filename), "trajectory")
+trajectory  = load(datadir(folder, filename), "states1")
 
 
 
@@ -86,7 +88,7 @@ fig, ax = subplots(nrows=2, ncols=1)
 
 fig.suptitle("FPUT chain at time t = 0.0000 T", fontsize=14)
 
-pq_init = Pstc*trajectory[:,1]
+pq_init = trajectory[:,1]  #* Pstc
 q_init = pq_init[N+1:2*N]
 ymax = 1.1*maximum(trajectory)
 
@@ -119,7 +121,7 @@ for τ in 1:3:length(periods)
     t = round(periods[τ], digits=4)
     fig.suptitle("FPUT chain at time t = $t T and time step $τ", fontsize=13)
 
-    pq = Pstc*trajectory[:,τ]
+    pq = trajectory[:,τ] #* Pstc
     q = pq[N+1:2*N]
 
     ax[1].clear()

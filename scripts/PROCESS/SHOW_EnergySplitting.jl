@@ -11,8 +11,7 @@ using DrWatson
 ##########  Enter File Name and Plot parameters   ##########
 ############################################################
 
-filename = "FPUTeffect_N=10_α=0.3_β=0.0_kbT=0.0_γ=0.0_mode=1.jld2"
-# folder = "DblEnsembles"
+filename = "FPUTeffect_N=10_α=0.5_β=0.0_kbT=0.0_γ=0.0_mode=1.jld2"
 folder = "Trajectories"
 
 colorlist = ["midnightblue", "lightskyblue", "crimson", "orange", "teal", "limegreen", "purple", "plum", "maroon", "orangered"]
@@ -37,7 +36,7 @@ trajectory  = load(datadir(folder, filename), "states1")
 sorting     = load(datadir(folder, filename), "sorting")
 println(sorting)
 
-t_start, t_end = first(periods), 80.0 # last(periods)
+t_start, t_end = first(periods), last(periods)
 n_times = length(periods)
 
 
@@ -82,7 +81,6 @@ println("#######################################################################
 println("#################################################################################################")
 
 
-# println("\n++++++++++   Test Line   ++++++++++\n")
 
 using PyPlot, LaTeXStrings, EnergySplitting
 import NormalModes: Matrix__local_to_nomo, nomoEnergy, frequencyNormalMode
@@ -111,22 +109,6 @@ totalenergies = @time totalEnergy(trajectory, κ,α,β; combined_sorting=combine
 energiesNM    = @time nomoEnergy(trajectory; κ=κ,    combined_sorting=combined_sorting)
 
 
-
-# fig, ax = subplots(nrows=1, ncols=1)
-# ax.plot(periods, totalenergies, color="k", lw=2, ls="dashed", label=L"total energy $⟨H⟩_\mathbb{E}$")
-# for i in 1:N
-#     ax.plot(periods, energies[i,:], lw=2, color=colorlist[i], label="site $i")
-# end
-# ax.grid()
-# ax.legend(fontsize="xx-large", loc="upper right")
-# ax.set_xlim([t_start-0.01, t_end+0.01])
-# ax.set_xlabel(L"time $t / \tau$", fontsize=fs)
-# ax.set_ylim([-0.01, maximum(totalenergies)*1.1])
-# ax.set_ylabel(L"energy $⟨H_i⟩_\mathbb{E} \cdot \frac{1}{\tilde{h}\sqrt{\kappa}}$", fontsize=fs)
-# ax.tick_params(labelsize=ts)
-# show()
-
-
 fig, ax = subplots(nrows=1, ncols=1)
 ax.plot(periods, totalenergies, color="k", lw=2, ls="dashed", label=L"total energy $⟨H⟩_\mathbb{E}$")
 for k in 1:NMmax
@@ -137,22 +119,6 @@ ax.legend(fontsize="xx-large", loc="upper right")
 ax.set_xlim([t_start-0.01, t_end+0.01])
 ax.set_xlabel(L"time $t / \tau$", fontsize=fs)
 ax.set_ylim([-0.01, maximum(totalenergies)*1.1])
-ax.set_ylabel(L"energy $⟨\tilde{H}_k⟩_\mathbb{E} \cdot \frac{1}{\tilde{h}\sqrt{\kappa}}$", fontsize=fs)
+ax.set_ylabel(L"energy $⟨\tilde{H}_k⟩_\mathbb{E}$", fontsize=fs)
 ax.tick_params(labelsize=ts)
 show()
-
-
-
-# fig, ax = subplots(nrows=1, ncols=1)
-# ax.plot(periods, totalenergies, color="k", lw=3, label=L"$⟨H⟩_\mathbb{E}$", ls="dotted")
-# ax.plot(periods, energiesNM[1,:], color=colorlist[1], lw=3, label=L"$⟨\tilde{H}_1⟩_\mathbb{E} \cdot \frac{1}{\tilde{h}\sqrt{\kappa}}$")
-# ax.plot(periods, energiesNM[2,:], color=colorlist[2], lw=3, label=L"$⟨\tilde{H}_2⟩_\mathbb{E} \cdot \frac{1}{\tilde{h}\sqrt{\kappa}}$")
-# ax.plot(periods, energiesNM[3,:], color=colorlist[3], lw=3, label=L"$⟨\tilde{H}_3⟩_\mathbb{E} \cdot \frac{1}{\tilde{h}\sqrt{\kappa}}$")
-# ax.grid()
-# ax.legend(fontsize="xx-large", loc="upper right")
-# ax.set_xlim([t_start-0.01, t_end+0.01])
-# ax.set_xlabel(L"time $t \cdot \frac{2\pi}{\sqrt{\kappa}}$", fontsize=fs)
-# ax.set_ylim([-0.01, maximum(totalenergies)+0.01])
-# ax.set_ylabel(L"energy", fontsize=fs)
-# ax.tick_params(labelsize=ts)
-# show()

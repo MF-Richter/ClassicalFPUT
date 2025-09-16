@@ -1,21 +1,26 @@
+"""
+This script loads an ensemble of trajectories from the data/'folder' computes
+the correlation witness between each pair of sites and save it as a dictionary
+to be loaded by 'LOAD_Correlations.jl" in the scrips/LOAD folder.
+"""
+
 using DrWatson
 @quickactivate "ClassicalFPUT"
-
-
 
 
 ############################################################
 ##########  Enter File Name and Plot parameters   ##########
 ############################################################
 
-filename = "Dbl_LocOsc_SHORT_N=2_α=0.0_β=0.0_n_traj=100000.jld2"
-Prefix = "SHORT-"
+filename = "LocOsc_TEST_N=2_α=0.0_β=0.0_n_traj=10000.jld2"
+folder   = "Ensembles"
+Prefix   = "TEST"
 
-## Ramnges for the average shited histrograms ov the ensembles
-n_mc = 100
-ϵ    = 0.5
-qrangeB = LinRange(-5.0, 5.0, 50)
-prangeB = LinRange(-5.0, 5.0, 50)
+n_mc = 3
+ϵ    = 0.3
+## Ranges for the average shited histograms over the ensembles
+qrangeB = LinRange(-5.0, 5.0, 100)
+prangeB = LinRange(-5.0, 5.0, 100)
 
 
 
@@ -25,10 +30,10 @@ prangeB = LinRange(-5.0, 5.0, 50)
 #####################################
 
 using JLD2
-println(keys(load(datadir("DblEnsembles", filename))))
-parameters = load(datadir("DblEnsembles", filename), "parameters")
-periods    = load(datadir("DblEnsembles", filename), "periods")
-states     = load(datadir("DblEnsembles", filename), "states1")
+println(keys(load(datadir(folder, filename))))
+parameters = load(datadir(folder, filename), "parameters")
+periods    = load(datadir(folder, filename), "periods")
+states     = load(datadir(folder, filename), "states1")
 
 initialstate = states[:,:,1]
 n_time = length(periods)

@@ -13,11 +13,11 @@ using DrWatson
 ##########  Enter File Name and Plot parameters   ##########
 ############################################################
 
-filename = "Dbl_LocOsc_MidBath_N=3_α=0.0_β=0.2_kbT=0.0_γ=0.1_n_traj=10000.jld2"
+filename = "Dbl_LocOsc_TEST_N=2_α=0.0_β=0.0_n_traj=10000.jld2"
 
-PlotSites = [1,2,3]
+PlotSites = [1,2]
 
-colorlist = ["k","lightcoral","tab:orange","teal","tab:cyan","tab:brown","tab:pink"]
+colorlist = ["midnightblue", "lightskyblue", "crimson", "orange", "teal", "limegreen", "purple", "plum", "maroon", "orangered"]
 
 fs=25
 ts=20
@@ -81,56 +81,23 @@ println()
 
 
 
-# using PyPlot, LaTeXStrings, EnergySplitting
-# using DistanceEnsembles
-# pygui(true)
-# include(srcdir("overprint.jl"))
-
-# array_distances = Matrix{Float64}(undef, n_time,length(PlotSites))
-# for i in eachindex(PlotSites)
-#     site = PlotSites[i]
-#     @time dis = koldis(states1[[site, N+site] ,: ,:], states2[[site, N+site] ,: ,:], rngx,rngy)
-#     array_distances[:,i] .= dis
-# end
-
-# fig, ax = subplots(nrows=1, ncols=1)
-# # fig.suptitle("Information Flow through Classical FPUT-Chain", fontsize=11)
-# for p in eachindex(PlotSites)
-#     ax.plot(periods, array_distances[:,p], color=colorlist[p], label="site $p")
-# end
-# ax.plot(periods, array_distances[:,1], c=colorlist[1])
-# ax.grid()
-# ax.legend(fontsize="xx-large", loc="upper right")
-# ax.set_xlim([t_start-0.01, t_end+0.01])
-# ax.set_xlabel(L"time $t \cdot \frac{2\pi}{\sqrt{\kappa}}$", fontsize=fs)
-# ax.set_ylim([-0.01, 1.01])
-# ax.set_ylabel(L"$d_\mathrm{Kol.}(W^\mathrm{class.}_1,W^\mathrm{class.}_2)$", fontsize=fs)
-# ax.tick_params(labelsize=ts)
-# show()
-
-
-
-
 using PyPlot, LaTeXStrings, EnergySplitting
 using DistanceEnsembles
 pygui(true)
 include(srcdir("overprint.jl"))
-colorarray = ["midnightblue","orange","crimson"]
 
-resolutions = [100, 200, 300]
-array_distances = Matrix{Float64}(undef, n_time,length(resolutions))
-for i in eachindex(resolutions)
+array_distances = Matrix{Float64}(undef, n_time,length(PlotSites))
+for i in eachindex(PlotSites)
     site = PlotSites[i]
-    range = LinRange(-5.0, 5.0, resolutions[i])
-    @time dis = koldis(states1[[1, N+1] ,: ,:], states2[[1, N+1] ,: ,:], range,range)
+    @time dis = koldis(states1[[site, N+site] ,: ,:], states2[[site, N+site] ,: ,:], rngx,rngy)
     array_distances[:,i] .= dis
 end
 
 fig, ax = subplots(nrows=1, ncols=1)
-# fig.suptitle("Information Flow through Classical FPUT-Chain", fontsize=11)
-for i in eachindex(resolutions)
-    ax.plot(periods, array_distances[:,i], color=colorarray[i], label="grid res. $(resolutions[i])² cells")
+for p in eachindex(PlotSites)
+    ax.plot(periods, array_distances[:,p], color=colorlist[p], label="site $p")
 end
+ax.plot(periods, array_distances[:,1], c=colorlist[1])
 ax.grid()
 ax.legend(fontsize="xx-large", loc="upper right")
 ax.set_xlim([t_start-0.01, t_end+0.01])
