@@ -21,8 +21,8 @@ n_mc = 3     # number of Monte-Carlo sample points to test for correlations
 ϵ    = 0.3   # radius around each sample point to condition ensemble
 
 ## Ranges for the average shited histograms over the ensembles
-qrangeB = LinRange(-5.0, 5.0, 100)
-prangeB = LinRange(-5.0, 5.0, 100)
+qrangeB = LinRange(-5.0, 5.0, 50)
+prangeB = LinRange(-5.0, 5.0, 50)
 
 
 
