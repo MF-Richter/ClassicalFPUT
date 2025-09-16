@@ -45,6 +45,19 @@ using DrWatson
 which auto-activate the project and enable local path handling from DrWatson.
 
 
+## Work flow
+Raw data in the form of phase-space trajectories (or Monte-Carlo ensembles of them) is computed
+by scripts within the folder scripts/COMPUTE and saved in corresponding subfolders in the
+data directory.
+
+In scripts/PROCESS, one finds scripts that load some raw data and process it, i.e., computing distances through time from it, etc. Such processed data might be saved as well in the data
+directory. scripts/LOAD includes scripts that simply load such processed data and plot it again.
+
+It is best to run each of the scripts in scripts/COMPUTE in order to generate some raw test data to
+be loaded by some processing scripts. If you keep any parameters and names as they are now,
+every file should be named such that you can also run the processing scripts directly.
+
+
 ## Acknowledgments
 This work has been supported by the German Research Foundation (DFG) through FOR 5099.
 
