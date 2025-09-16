@@ -16,8 +16,10 @@ filename = "LocOsc_TEST_N=2_α=0.0_β=0.0_n_traj=10000.jld2"
 folder   = "Ensembles"
 Prefix   = "TEST"
 
-n_mc = 3
-ϵ    = 0.3
+
+n_mc = 3     # number of Monte-Carlo sample points to test for correlations
+ϵ    = 0.3   # radius around each sample point to condition ensemble
+
 ## Ranges for the average shited histograms over the ensembles
 qrangeB = LinRange(-5.0, 5.0, 100)
 prangeB = LinRange(-5.0, 5.0, 100)
