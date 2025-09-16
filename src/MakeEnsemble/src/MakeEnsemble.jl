@@ -1,11 +1,17 @@
-
+"""
+The module 'MakeEnsemble' provides several functions to generate an ensemble of initial points
+distributed by some Gaussian distribution over the multipartite phase-space. To do so, it includes
+some functions to build multipartite displacement vectors and covariance matrices from
+local ones to create initially uncorrelated ensembles.
+"""
 module MakeEnsemble
     using  Random, Distributions
     export directsum, SystemEnvMeanvalue, SystemEnvCovariances, Gaussian_ensemble
     
     """
-    'directsum' computes the algebraic direct sum of two matrices of same type or an array of matrices of same type, i.e. a larger
-    matrix of combined dimensions with the input matrices as diagonal blocks. For example:
+    'directsum' computes the algebraic direct sum of two matrices of same type or an array of
+    matrices of same type. The result is a larger matrix of combined dimensions with the input matrices
+    as diagonal blocks. For example:
     
     M1 = [1 2; 2 1] and M2 = [3 0 0; 0 3 0; 0 0 3]
     directsum(M1,M2) = [1 2 0 0 0; 2 1 0 0 0; 0 0 3 0 0; 0 0 0 3 0; 0 0 0 0 3]
@@ -27,11 +33,11 @@ module MakeEnsemble
 
 
     """
-    This function generates the vector containing the mean values (i.e. first statisticval momeents) for
-    N-partite phase space system, e.g. a FPUT chain with N oscillators. The oscillator at 'siteS' is as-
-    sumed to be the system of interest while the remaining oscillators are accounted as part of the envi-
-    ronment. The system oscillator has mean values 'μS' while all the environmental oscillators have mean
-    values 'μE'.
+    This function generates the vector containing the mean values (i.e., first statistical moments)
+    for an N-partite phase-space system, e.g., a FPUT chain with N oscillators. The oscillator at
+    'siteS' is assumed to be the system of interest, while the remaining oscillators are accounted
+    as part of the environment. The system oscillator has mean values 'μS', while all the environmen-
+    tal oscillators have mean values 'μE'.
     """
     function SystemEnvMeanvalue(
         μS::Vector{Float64},  # mean vaule of the system oscillator
@@ -60,10 +66,11 @@ module MakeEnsemble
 
     
     """
-    This function generates the covariance matrix (i.e. first statisticval momeents) for N-partite phase
-    space system, e.g. a FPUT chain with N oscillators. The oscillator at 'siteS' is assumed to be the
-    system of interest while the remaining oscillators are accounted as part of the environment. The sys-
-    tem oscillator is cov. matrix 'ΣS' while all the environmental oscillators have meanvalues 'ΣE'.
+    This function generates the covariance matrix (i.e., first statistical moments) for an N-partite
+    phase-space system, e.g., a FPUT chain with N sites. The system at 'siteS' is assumed
+    to be the system of interest, while the remaining systems are accounted as part of the envi-
+    ronment. The system site has covariance matrix 'ΣS', while all the environmental sites have covari-
+    ance matrix 'ΣE'.
     """
     function SystemEnvCovariances(
         ΣS::Matrix{Float64},  # cov. matrix of the system oscillator
@@ -92,8 +99,8 @@ module MakeEnsemble
 
 
     """
-    A function to create an ensemble of points according to a multivariant normal distribution with mean values 'μ' and
-    covariance matrix 'Σ'.
+    A function to create an ensemble of points according to a multivariant normal distribution
+    with mean values 'μ' and covariance matrix 'Σ'.
     """
     function Gaussian_ensemble(
         μ::Vector{Float64},  # mean value of ensemble

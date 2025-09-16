@@ -1,10 +1,10 @@
 """
-'EquetionsOfMotionFPUT' is a module providing the EOMs of a FPUT chain as well as tools for the
-dissipative and fluctuative terms of thermal baths coupled to single oscillators of the chain.
+'EquationsOfMotionFPUT' is a module providing the EOMs of a FPUT chain as well as tools for the
+dissipative and fluctuating terms of thermal baths coupled to single oscillators of the chain.
 """
 module EquationsOfMotionFPUT
     using LinearAlgebra
-    export HamiltonianFPUT, HamEOM_FPUT, KineticDissipation, Noise, NoiseAtSites
+    export HamiltonianFPUT, HamEOM_FPUT, KineticDissipation, NoiseAtSites
 
 
     """
@@ -39,12 +39,11 @@ module EquationsOfMotionFPUT
     """
     function PotentialFPUT(
         q,
-        κ::Float64, α::Float64, β::Float64;
-        potential_factor::Float64 = 1.0
+        κ::Float64, α::Float64, β::Float64
         )
         N = length(q)
 
-        potentialFPUT(r) = potential_factor * (κ/2*r^2 + α/6*r^3 + β/24*r^4)
+        potentialFPUT(r) = κ/2*r^2 + α/6*r^3 + β/24*r^4
 
         V = potentialFPUT(-q[1])
         for i in 1:(N-1)
@@ -60,10 +59,9 @@ module EquationsOfMotionFPUT
     """
     function HamFPUT(
         p, q,
-        κ::Float64, α::Float64, β::Float64;
-        potential_factor::Float64 = 1.0
+        κ::Float64, α::Float64, β::Float64
         )
-        return KineticFPUT(p) + PotentialFPUT(q, κ,α,β; potential_factor=potential_factor)
+        return KineticFPUT(p) + PotentialFPUT(q, κ,α,β)
     end
 
 
@@ -86,12 +84,11 @@ module EquationsOfMotionFPUT
 
     function EOMmomentum_FPUT(
         q,
-        κ::Float64, α::Float64, β::Float64;
-        potential_factor::Float64 = 1.0
+        κ::Float64, α::Float64, β::Float64
         )
         N = length(q)
 
-        gradFPUT(r) = potential_factor * (κ*r + α/2*r^2 + β/6*r^3)
+        gradFPUT(r) = κ*r + α/2*r^2 + β/6*r^3
 
         pdot = Vector{Float64}()
         push!(pdot, gradFPUT(-q[1]) - gradFPUT(q[1] - q[2]))
@@ -104,31 +101,33 @@ module EquationsOfMotionFPUT
 
     function sglEOMmomentum_FPUT(
         q,
-        κ::Float64, α::Float64, β::Float64;
-        potential_factor::Float64 = 1.0
+        κ::Float64, α::Float64, β::Float64
         )
-        gradFPUT(r) = potential_factor * (κ*r + α/2*r^2 + β/6*r^3)
+        gradFPUT(r) = κ*r + α/2*r^2 + β/6*r^3
         return gradFPUT(-q) - gradFPUT(q)
     end
 
     """
-    Generating the DGL of the momentum and position coordinates of a FPUT chain with coupling pot-
+    Generating the DiffEq of the momentum and position coordinates of a FPUT chain with coupling pot-
     ential 
     """
     function HamEOM_FPUT(
         p, q,
-        κ::Float64, α::Float64, β::Float64;
-        potential_factor::Float64 = 1.0        
+        κ::Float64, α::Float64, β::Float64       
         )
         if length(p)==1
             p = p[1]
             q = q[1]
-            return [sglEOMmomentum_FPUT(q, κ,α,β, potential_factor=potential_factor), sglEOMposition_FPUT(p)]
+            return [sglEOMmomentum_FPUT(q, κ,α,β), sglEOMposition_FPUT(p)]
         else
-            return [EOMmomentum_FPUT(q, κ,α,β, potential_factor=potential_factor); EOMposition_FPUT(p)]
+            return [EOMmomentum_FPUT(q, κ,α,β); EOMposition_FPUT(p)]
         end
     end
 
+
+    """
+    The dissipation term for the DiffEq when a damping is attached to one 'site' of the chain
+    """
     function KineticDissipation(
         p, q,
         ξ::Float64,
@@ -148,27 +147,9 @@ module EquationsOfMotionFPUT
         return  Dissipator*[p;q]
     end
 
-    function Noise(
-        N::Int64,
-        ξ::Float64,
-        kbT::Float64,
-        sites::Vector{Int64}
-        )
-
-        γ = sqrt(2*ξ*kbT)
-        NoiseDiagonal = zeros(2*N)
-
-        for i in 1:N
-            if i in sites
-                NoiseDiagonal[i]   = γ
-                # NoiseDiagonal[i]   = 1.0
-               # NoiseDiagonal[N+i] = γ
-            end
-        end
-
-        return diagm(NoiseDiagonal)
-    end
-
+    """
+    Fluctuative noise term of a bath of temperature 'kbT' attached to several 'sites' of the chain
+    """
     function NoiseAtSites(
         N::Int64,
         ξ::Float64,

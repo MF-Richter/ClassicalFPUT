@@ -1,15 +1,15 @@
 
 """
-The module 'EnergySplitting' includes functions to quantify the distribution of the chains total
-energy over the local oscilators. Note that while the kenitic energy of a single oscillator is
-easily determined only by its momentum the potential energy has a certain arbitrarity to it. One
-can easily define the potential between two oscilators using their relative distance but how to
-share this potential between thees two oscillators is gives some freedom of choice.
-In here the potential between two oscillators is split eaquely.
-Yet this leaves half the remaining potential between the first oscillator and the left fixed end
-and another half pot. between the last oscillator and the right fixed end. Since thees two remain-
-ing half potentials are understood as a potential in which the chain as a whole is put into we
-distribute them equaly over all oscillators.
+The module 'EnergySplitting' includes functions to quantify the distribution of the chain's total
+energy over the local oscillators. Note that while the kinetic energy of a single oscillator is
+easily determined by its momentum, the potential energy has a certain arbitrariness to it. One
+can easily define the potential between two oscillators using their relative distance, but how to
+share this potential between these two oscillators gives some freedom of choice.
+Here, the potential between two oscillators is split equally.
+However, this leaves half the remaining potential between the first oscillator and the left fixed end
+and another half potential between the last oscillator and the right fixed end. Since these two remai-
+ning half potentials are understood as a potential in which the chain as a whole is put into, we
+distribute them equally over all oscillators.
 """
 module EnergySplitting
 
@@ -19,28 +19,29 @@ module EnergySplitting
     
 
     """
-    Returning the the FPUT potential V as function of 'r', i.e. the coupling is between particle at site i and
-    its neigbor at i+1 is given by V(q_i - q_i+1).
+    Returning the the FPUT potential V as function of 'r', i.e. the coupling is between particle at
+    site i and its neigbor at i+1 is given by V(q_i - q_i+1).
     """
     function Potential(
         κ::Float64,
         α::Float64,
-        β::Float64;
-        potential_factor::Float64=1.0
+        β::Float64
         )
-        V(r::Float64) = (r^2*κ/2 + r^3*α/6 + r^4*β/24) * potential_factor
+        V(r::Float64) = r^2*κ/2 + r^3*α/6 + r^4*β/24
         return V
     end
 
     """
-    Returns the energie of the oscillator at site 'i' for a chain of N oscillators coupled by the
+    Returns the energy of the oscillator at site 'i' for a chain of N oscillators coupled by the
     FPUT potential
-    V(r) = (r²*κ/2! + r³*α/3! + r⁴*β/4!)
-    with fixed ends. The state of the chain is defined by its phase-space ccordinate vector in
-    combined sorting (see EvolveEnsemble.jl), i.e. pq = [p1,...,pN, q1,...,qN]. The potential en-
-    ergy between two oscillators is devided between the two, the remaining half potentials to the
-    fixed ends is distributed equaly over all oscillators as some outer pot. of the whole chain.
-    When no index 'i' is passed the function returns a vector containg the energies for at all
+
+    V(r) = (r²κ/2! + r³α/3! + r⁴*β/4!)
+
+    with fixed ends. The state of the chain is defined by its phase-space coordinate vector in
+    combined sorting (see EvolveEnsemble.jl), i.e., pq = [p1,...,pN, q1,...,qN]. The potential energy
+    between two oscillators is divided between the two, and the remaining half potentials to the
+    fixed ends are distributed equally over all oscillators as some outer potential of the whole chain.
+    When no index 'i' is passed, the function returns a vector containing the energies for all
     sites.
     """
     function localEnergy(
@@ -49,17 +50,15 @@ module EnergySplitting
         i::Int64,            # index of particle
 
         κ::Float64,          # harmonic coupling coefficient
-        α::Float64,          # cubis coupling coefficient
-        β::Float64;          # tetric coupling coefficient
-
-        potential_factor::Float64 = 1.0
+        α::Float64,          # cubic coupling coefficient
+        β::Float64           # tetric coupling coefficient
         )
 
         N = Int64(0.5*length(pq))
         p = pq[1:N]
         q = pq[N+1:2*N]
 
-        V = Potential(κ,α,β, potential_factor=potential_factor)
+        V = Potential(κ,α,β)
         if i==1
             if length(p)==1
                 return 0.5*p[i]^2 + V(-q[i]) + V(q[i])
@@ -84,7 +83,6 @@ module EnergySplitting
         α::Float64,          # cubis coupling coefficient
         β::Float64;          # tetric coupling coefficient   
 
-        potential_factor::Float64=1.0,
         combined_sorting=true
         )
 
@@ -101,7 +99,7 @@ module EnergySplitting
         
         for τ in eachindex(energies)
             pq = M*trajectory[:,τ]
-            energies[τ] = localEnergy(pq, i, κ,α,β; potential_factor=potential_factor)
+            energies[τ] = localEnergy(pq, i, κ,α,β)
         end
 
         return energies
@@ -114,16 +112,14 @@ module EnergySplitting
 
         κ::Float64,          # harmonic coupling coefficient
         α::Float64,          # cubis coupling coefficient
-        β::Float64;          # tetric coupling coefficient   
-
-        potential_factor::Float64=1.0
+        β::Float64           # tetric coupling coefficient   
         )
 
         N = Int64(0.5*length(pq))
         energies = Vector{Float64}(undef, N)
 
         for i in 1:N
-            push!(energies, localEnergy(pq, i, κ,α,β, potential_factor=potential_factor))
+            push!(energies, localEnergy(pq, i, κ,α,β))
         end
 
         return energies
@@ -131,8 +127,7 @@ module EnergySplitting
 
     function localEnergy(
         trajectory::Matrix{Float64}, # Vector with the local position and momentum coordinates in combiened sorting
-        κ::Float64,α::Float64,β::Float64;  
-        potential_factor::Float64=1.0,
+        κ::Float64,α::Float64,β::Float64;
         combined_sorting=true
         )
 
@@ -142,7 +137,7 @@ module EnergySplitting
         energies = Matrix{Float64}(undef, N,n_time)
         
         for i in 1:N
-            energies[i,:] = localEnergy(trajectory, i, κ,α,β; potential_factor=potential_factor, combined_sorting=combined_sorting)
+            energies[i,:] = localEnergy(trajectory, i, κ,α,β; combined_sorting=combined_sorting)
         end
 
         return energies
@@ -179,10 +174,9 @@ module EnergySplitting
 
     function PotentialEnergy(
         q::Vector{Float64},
-        κ::Float64,α::Float64,β::Float64;
-        potential_factor::Float64=1.0
+        κ::Float64,α::Float64,β::Float64
         )
-        Pot = Potential(κ,α,β, potential_factor=potential_factor)
+        Pot = Potential(κ,α,β)
         N = length(q)
         V =  Pot(-q[1])
         for i in 2:N
@@ -194,19 +188,21 @@ module EnergySplitting
 
     function totalEnergy(
         pq::Vector{Float64},
-        κ::Float64,α::Float64,β::Float64;
-        potential_factor::Float64=1.0       
+        κ::Float64,α::Float64,β::Float64      
         )
         N = Int64(0.5*length(pq))
         p = pq[1:N]
         q = pq[N+1:2*N]
-        return KineticEnergy(p) + PotentialEnergy(q, κ,α,β, potential_factor=potential_factor)
+        return KineticEnergy(p) + PotentialEnergy(q, κ,α,β)
     end
 
+    """
+    Computes the total energy over time for one or an ensemble of trajectories for an FPUT Hamiltonian.
+    This can be used for benchmarking the trajectories.
+    """
     function totalEnergy(
         trajectory::Matrix{Float64},
         κ::Float64,α::Float64,β::Float64;
-        potential_factor::Float64=1.0,
         combined_sorting::Bool = true      
         )
         dim = size(trajectory)[1]
@@ -222,7 +218,7 @@ module EnergySplitting
         
         for τ in eachindex(energies)
             pq = M*trajectory[:,τ]
-            energies[τ] = totalEnergy(pq, κ,α,β; potential_factor=potential_factor)
+            energies[τ] = totalEnergy(pq, κ,α,β)
         end
 
         return energies

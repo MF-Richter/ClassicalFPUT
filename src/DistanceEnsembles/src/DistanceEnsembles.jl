@@ -1,8 +1,8 @@
 
 """
-The module DistanceEnsembles provides functions to turn a given ensembles of points in
-phase space into a histogram as discret distribution over phase space, using the package
-'AverageShiftedHistograms.jl', as well as functions computing based on this histrogram the
+The module DistanceEnsembles provides functions to turn a given ensemble of points in
+phase space into a histogram as a discrete distribution over phase space, using the package
+'AverageShiftedHistograms.jl', as well as functions computing, based on this histogram, the
 Kolmogorov distance between two such ensembles.
 """
 module DistanceEnsembles
@@ -10,11 +10,11 @@ module DistanceEnsembles
     export griddensity, koldis
 
     """
-    The function'griddensity()' takes an ensemble of points in a 2D space (e.g. phase-space) as
-    well as ranges 'rngx' and 'rngy' over its two axis and generates an average shifted histogram
-    of this ensemble over the 2D grid defined by rngx and rngy containing the probabilities to
+    The function 'griddensity()' takes an ensemble of points in a 2D space (e.g., phase-space) as
+    well as ranges 'rngx' and 'rngy' over its two axes and generates an average shifted histogram
+    of this ensemble over the 2D grid defined by rngx and rngy, containing the probabilities to
     find a member of the ensemble in the specific cell of the grid. This function is essentially
-    a wrapper arround the central functions of AverageShiftedHistograms.jl, see its documentation
+    a wrapper around the central functions of AverageShiftedHistograms.jl. See its documentation
 
     https://joshday.github.io/AverageShiftedHistograms.jl/stable/
 
@@ -29,10 +29,6 @@ module DistanceEnsembles
         return histogram / sum(histogram)
     end
 
-    """
-    For tow 2D histograms, i.e. prob. distributions,  over the same grid 'koldis_grid()'
-    computes the Kolmogorov distance between them.
-    """
     function koldis_grid(
         griddensity_1::Matrix{Float64},
         griddensity_2::Matrix{Float64}
@@ -42,13 +38,12 @@ module DistanceEnsembles
 
 
     """
-    Given two ensembles of points in a 2D space the function 'koldis' generates for both ensem-
-    bles an average shifted histogram over the same grid and computes their Kolmogorov distance
+    Given two ensembles of points in a 2D space, the function 'koldis' generates for both ensembles
+    an average shifted histogram over the same grid and computes their Kolmogorov distance
     as a measure of distinguishability of the two ensembles. The grid is defined by fixed ranges
-    'rngx' and 'rngy'. This reflects an experimental approach where one would measure an actual
-    ensemble of trajectories by some aparatus which defins its fixed grid of bins such that each
-    ensemble appears as a distribution over this fixed grid. Thus, the apartus can distinguish
-    two points only up to the size of its grid cells.
+    'rngx' and 'rngy'.
+    If an ensemble of trajectories is passed instead of an ensemble of points the Kolmogorov dis-
+    tance is computed for each point in time.
     """
     function koldis(
         points1::Matrix{Float64},

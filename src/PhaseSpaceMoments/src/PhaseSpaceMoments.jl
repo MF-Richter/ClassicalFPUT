@@ -1,7 +1,12 @@
+"""
+This module provides some functions to compute phase-space mean values and (co)variances for an
+ensemble of points in a multipartite phase-space. The coordinates of each point should be given
+in combined ordering, i.e., x = (p1, ..., pN, q1, ..., qN). If the points are sorted subsystem-
+wise, please convert the ensemble first.
+"""
 module PhaseSpaceMoments
 
     using Statistics, LinearAlgebra
-    # include("Sorting_Coordinates.jl")
     export AveragedCoordinate, meanPhSp, meandisplacement, phasespaceangle,
     CovarianceMatrix, CovarianceDeterminant, CovarianceSqueezing, Covariances
 
@@ -55,7 +60,7 @@ module PhaseSpaceMoments
     function meanPhSp(
         points::Matrix{Float64},
         site::Int64;
-        sorting::String="combined")
+        )
         N = Int(0.5*size(points)[1])
         q = AveragedCoordinate(points, N+site)
         p = AveragedCoordinate(points, site)
@@ -65,12 +70,12 @@ module PhaseSpaceMoments
     function meanPhSp(
         trajectories::Array{Float64,3},
         site::Int64;
-        sorting::String="combined")
+        )
 
         n_time = size(trajectories)[3]
         means = Matrix{Float64}(undef, 2,n_time)
         for i in 1:n_time
-            means[:,i] .= meanPhSp(trajectories[:,:,i], site; sorting=sorting)
+            means[:,i] .= meanPhSp(trajectories[:,:,i], site)
         end
         return means
     end
@@ -80,21 +85,19 @@ module PhaseSpaceMoments
     """    
     function meandisplacement(
         points::Matrix{Float64},
-        site::Int64;
-        sorting::String="combined"
+        site::Int64
         )
-        return norm(meanPhSp(points, site; sorting=sorting))
+        return norm(meanPhSp(points, site))
     end
 
     function meandisplacement(
         trajectories::Array{Float64,3},
         site::Int64;
-        sorting::String="combined"
         )
         n_time = size(trajectories)[3]
         μs = Vector{Float64}(undef, n_time)
         for i in eachindex(μs)
-            μs[i] = meandisplacement(trajectories[:,:,i], site; sorting=sorting)
+            μs[i] = meandisplacement(trajectories[:,:,i], site)
         end
         return μs
     end
@@ -104,22 +107,20 @@ module PhaseSpaceMoments
     """
     function phasespaceangle(
         points::Matrix{Float64},
-        site::Int64;
-        sorting::String="combined"
+        site::Int64
         )
-        qp = meanPhSp(points, site; sorting=sorting)
+        qp = meanPhSp(points, site)
         return atan(qp[1],qp[2])
     end
 
     function phasespaceangle(
         trajectories::Array{Float64,3},
-        site::Int64;
-        sorting::String="combined"
+        site::Int64
         )
         n_time = size(trajectories)[3]
         φs = Vector{Float64}(undef, n_time)
         for i in eachindex(μs)
-            φs[i] = phasespaceangle(trajectories[:,:,i], site; sorting=sorting)
+            φs[i] = phasespaceangle(trajectories[:,:,i], site)
         end
         return φs
     end
@@ -133,8 +134,7 @@ module PhaseSpaceMoments
 
     function CovarianceMatrix(
         points::Matrix{Float64},
-        site::Int64;
-        sorting::String="combined"
+        site::Int64
         )
         N = Int(0.5*size(points)[1])
         return 2*cov(points[[N+site,site],:]; dims=2, corrected=true)
@@ -153,24 +153,22 @@ module PhaseSpaceMoments
 
     function CovarianceMatrix(
         trajectories::Array{Float64,3},
-        site::Int64;
-        sorting::String="combined"
+        site::Int64
         )
         n_time = size(trajectories)[3]
         CovMs= Vector{Matrix{Float64}}(undef, n_time)
         for i in 1:n_time
-            CovMs[i] = CovarianceMatrix(trajectories[:,:,i], site; sorting=sorting)
+            CovMs[i] = CovarianceMatrix(trajectories[:,:,i], site)
         end
         return CovMs
     end
 
     function Covariances(
         trajectories::Array{Float64,3},
-        site::Int64;
-        sorting::String="combined"
+        site::Int64
         )
 
-        Sigmas = CovarianceMatrix(trajectories, site; sorting=sorting)
+        Sigmas = CovarianceMatrix(trajectories, site)
         Vars_q  = []
         Vars_p  = []
         Covs_qp = []
@@ -185,18 +183,16 @@ module PhaseSpaceMoments
 
     function CovarianceDeterminant(
         points::Matrix{Float64},
-        site::Int64;
-        sorting::String="combined"
+        site::Int64
         )
-        return det(CovarianceMatrix(points, site; sorting=sorting))  
+        return det(CovarianceMatrix(points, site))  
     end
 
     function CovarianceDeterminant(
         trajectories::Array{Float64,3},
-        site::Int64;
-        sorting::String="combined"
+        site::Int64
         )
-        return det.(CovarianceMatrix(trajectories, site; sorting=sorting))  
+        return det.(CovarianceMatrix(trajectories, site))  
     end
 
     function squeezing(Σ::Matrix{Float64})
@@ -206,18 +202,16 @@ module PhaseSpaceMoments
 
     function CovarianceSqueezing(
         points::Matrix{Float64},
-        site::Int64;
-        sorting::String="combined"
+        site::Int64
         )
-        return squeezing(CovarianceMatrix(points, site; sorting=sorting))
+        return squeezing(CovarianceMatrix(points, site))
     end
 
     function CovarianceSqueezing(
         trajectories::Array{Float64,3},
-        site::Int64;
-        sorting::String="combined"
+        site::Int64
         )
-        return squeezing.(CovarianceMatrix(trajectories, site; sorting=sorting))
+        return squeezing.(CovarianceMatrix(trajectories, site))
     end
 
 end 

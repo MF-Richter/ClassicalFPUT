@@ -1,4 +1,9 @@
-
+"""
+The module 'NormalModes' provides functions to compute normal mode quantities, such as frequency
+and energy in a single mode, as well as a transformation of a vector in local mode coordinates
+(i.e., position and quadratures of the local sites) into normal mode coordinates (i.e., collective
+positional and momentum displacement).
+"""
 module NormalModes
     include("Sorting_Coordinates.jl")
 
@@ -15,38 +20,39 @@ module NormalModes
 
 
     """
-    A function that comnputes the frequency of the 'n'-th normal mode of a linear chain of 'N' oscillators assuming a
-    harmonic coupling potential
-    V(r) = potential_factor * (κ/2 r²)
+    A function that comnputes the frequency of the normal mode 'mode' of a linear chain of 'N'
+    sites assuming a harmonic coupling potential
+    V(r) = κ/2 r²
     """
     function frequencyNormalMode(
-        N::Int64,        # number of chain elements (i.e. chain length)
-        n::Int64,        # index of the mode
-        κ::Float64=1.0;  # harmonic coupling coefficient
-        potential_factor::Float64 = 1.0
+        N::Int64,       # number of chain elements (i.e. chain length)
+        mode::Int64,    # index of the mode
+        κ::Float64=1.0  # harmonic coupling coefficient
         )
-        return sqrt(potential_factor*κ) * 2*sin(0.5*pi*n/(N+1))
+        return sqrt(κ) * 2*sin(0.5*pi*mode/(N+1))
     end
 
 
     """
-    Given the vector with local coordinates 'localCs' (i.e. positions or momenta for each oscillator in a harmonic chain)
-    this function computes the corresponding coordinate 'nomoCn' of the 'n'-th normal mode of this chain. The length of
-    the chain is determined by the length of the given vector.
-    If no mode index 'n' is given it returns a vector conatining the coordinate for all normal modes of the chain.
+    Given the vector with local coordinates 'localCs' (i.e., positions or momenta for each site
+    of a harmonic chain), this function computes the corresponding coordinate 'nomoCn' of the
+    normal mode with index 'mode' of this chain. The length of the chain is determined by the
+    length of the given vector.
+    If no mode index 'mode' is given, it returns a vector containing the coordinate for all
+    normal modes of the chain.
     """
     function coordinateNormalMode(
         localCs::Vector{Float64}, # Vector with the local coordinates
-        n::Int64   # index of the mode
+        mode::Int64   # index of the mode
         )
 
         N = length(localCs)  # number of chain elements (i.e. chain length)
-        if n>N
-            error("The chain has only $N normal modes; n=$n is to large")
+        if mode>N
+            error("The chain has only $N normal modes; n=$mode is to large")
         else
-            nomoCn = sqrt(2/(N+1)) * localCs[1]*sin(pi*n*1/(N+1))
+            nomoCn = sqrt(2/(N+1)) * localCs[1]*sin(pi*mode*1/(N+1))
             for i in 2:N
-                nomoCn += sqrt(2/(N+1)) * localCs[i]*sin(pi*n*i/(N+1))
+                nomoCn += sqrt(2/(N+1)) * localCs[i]*sin(pi*mode*i/(N+1))
             end
 
             return nomoCn
@@ -59,16 +65,16 @@ module NormalModes
         )
         N = length(localCs)  # number of chain elements (i.e. chain length)
         nomoCs = Vector{Float64}()
-        for n in 1:N
-            push!(nomoCs, coordinateNormalMode(localCs,n))
+        for mode in 1:N
+            push!(nomoCs, coordinateNormalMode(localCs,mode))
         end
         return nomoCs
     end
 
     """
-    For a linear chain of 'N' coupled oscillators this function returns the basis change matrix 'M' between local phase-space
-    coordinates localCs = [c1,...,cN] and normal mode phase-space coordinates nomoCs = [C1,...,CN], i.e.
-    nomoCs = M*localCs
+    For a linear chain of 'N' coupled oscillators, this function returns the basis change
+    matrix 'M' between local phase-space coordinates localCs = [c1,...,cN] and normal mode
+    phase-space coordinates nomoCs = [C1,...,CN], i.e., nomoCs = M*localCs
     """
     function Matrix__local_to_nomo(N::Int64)
         M = Array{Float64,2}(undef, N,N)
@@ -81,9 +87,9 @@ module NormalModes
     end
 
     """
-    ...
+    Converts an ensemble of points given in local coordinates to nomal mode coordinates
     """
-    function convertensemble__local_to_nomo(ensemble; sorting_subsys = true)
+    function convertensemble__local_to_nomo(ensemble)
         N = Int64(size(ensemble)[1]/2)
         n_points = size(ensemble)[2]
         P_stc = PermMatrix__subsys_to_combined(N)
@@ -101,32 +107,31 @@ module NormalModes
 
 
     """
-    Given the vector with local phase-space coordinates 'localPQs' = [p1,...,pN, q1,...,qN] of a linear chain of harmonic
-    oscillators coupled by the potential
-    V(r) = potential_factor * (κ/2 r²)
-    this function computes the energy within the 'n'-th normal mode.
-    If no mode index 'n' is given it returns a vector conatining the energies for each normal modes of the chain.
+    Given the vector with local phase-space coordinates 'localPQs' = [p1,...,pN, q1,...,qN] of
+    a linear chain of harmonic oscillators coupled by the potential
+    V(r) = κ/2 r²,
+    this function computes the energy within the normal mode with index 'mode'.
+    If no mode index 'n' is given, it returns a vector containing the energies for each normal
+    mode of the chain.
     """
     function nomoEnergy(
         localPQs::Vector{Float64}, # Vector with the local position and momentum coordinates in combiened sorting
-        n::Int64;                  # index of the mode
-        κ::Float64=1.0,            # harmonic coupling coefficient
-        potential_factor::Float64 = 1.0
+        mode::Int64;                  # index of the mode
+        κ::Float64=1.0            # harmonic coupling coefficient
         )
 
         N = Int64(0.5*length(localPQs))
-        nomoP = coordinateNormalMode(localPQs[1:N],n)
-        nomoQ = coordinateNormalMode(localPQs[N+1:2*N],n)
-        Ω = frequencyNormalMode(N, n, κ; potential_factor=potential_factor)
+        nomoP = coordinateNormalMode(localPQs[1:N],mode)
+        nomoQ = coordinateNormalMode(localPQs[N+1:2*N],mode)
+        Ω = frequencyNormalMode(N, mode, κ)
 
         return 1/2 * (nomoP^2 + Ω^2*nomoQ^2)
     end
 
     function nomoEnergy(
         trajectory::Array{Float64,2}, # Vector with the local position and momentum coordinates in combiened sorting
-        n::Int64;                  # index of the mode
+        mode::Int64;                  # index of the mode
         κ::Float64=1.0,            # harmonic coupling coefficient
-        potential_factor::Float64 = 1.0,
         combined_sorting::Bool = true
         )
 
@@ -143,7 +148,7 @@ module NormalModes
 
         for i in eachindex(nomoEnergies)
             localPQs = M*trajectory[:,i]
-            nomoEnergies[i] = nomoEnergy(localPQs, n; κ=κ, potential_factor=potential_factor)
+            nomoEnergies[i] = nomoEnergy(localPQs, mode; κ=κ)
         end
 
         return nomoEnergies
@@ -151,13 +156,12 @@ module NormalModes
 
     function nomoEnergy(
         localPQs::Vector{Float64}; # Vector with the local position and momentum coordinates in combiened sorting
-        κ::Float64=1.0,             # harmonic coupling coefficient
-        potential_factor::Float64 = 1.0
+        κ::Float64=1.0             # harmonic coupling coefficient
         )
         N = Int64(0.5*length(localPQs))
         nomoEs = Vector{Float64}()
-        for n in 1:N
-            push!(nomoEs, nomoEnergy(localPQs, n, κ=κ, potential_factor=potential_factor))
+        for mode in 1:N
+            push!(nomoEs, nomoEnergy(localPQs, mode, κ=κ))
         end
         return nomoEs
     end
@@ -165,7 +169,6 @@ module NormalModes
     function nomoEnergy(
         trajectory::Array{Float64,2}; # Vector with the local position and momentum coordinates in combiened sorting
         κ::Float64=1.0,            # harmonic coupling coefficient
-        potential_factor::Float64 = 1.0,
         combined_sorting::Bool = true
         )
 
@@ -182,7 +185,7 @@ module NormalModes
 
         for i in 1:n_time
             localPQs = M*trajectory[:,i]
-            nomoEnergies[:,i] = nomoEnergy(localPQs; κ=κ, potential_factor=potential_factor)
+            nomoEnergies[:,i] = nomoEnergy(localPQs; κ=κ)
         end
 
         return nomoEnergies

@@ -1,3 +1,10 @@
+"""
+The module 'EvolveEnsembles' contains several functions to evolve a single initial points or
+an ensemble of initial points in a multipartite phase-space according to some given EOMs over
+a given time range. It also provides some functions to evolve them by some stochastic EOMs;
+however, these functions often show complications and should be regarded only as experimental
+and are not used in our research so far.
+"""
 module EvolveEnsemble
     using DifferentialEquations
     using Base.Threads
@@ -7,9 +14,8 @@ module EvolveEnsemble
     include("Sorting_Coordinates.jl")
     
     """
-    Reshaping the solution (i.e. the trajectory) such that it is a 2D Array of Float64 where for each subsystems
-    the position coordinate is followed by its momentum coordinate, i.e. the array trajectory[:,t] corresponds ToolsBuildFPUT
-    the phase-space vector
+    Reshaping the solution (i.e., the trajectory) such that it is a 2D Array of Float64 where, for each subsystem,
+    the position coordinate is followed by its momentum coordinate, i.e., the array trajectory[:,t] corresponds to the phase-space vector
 
     x(t) = ( q1(t),p1(t), q2(t),p2(t), ... , qN(t),pN(t) ).
     """
@@ -31,8 +37,8 @@ module EvolveEnsemble
     end
 
     """
-    Converting the solution array to an 2D Array of Float64 - same as sortPhSpTraj__combined_to_subsys() - yet without reshaping
-    the coordinate sequence.
+    Converting the solution array to a 2D Array of Float64 - same as sortPhSpTraj__combined_to_subsys() -
+    yet without reshaping the coordinate sequence.
     """
     function convert_solution(
         solArray  # Array with solution (i.e. trajectory) es returned by Hamiltonian problem ODEsolver
@@ -54,14 +60,17 @@ module EvolveEnsemble
 
 
     """
-    Evolves an ensemble of initial points 'xpoints' (in subsys sorting) according to the deterministic equations of motion
-    defined by 'EOM!' in accordance to the ODE problem and solver requirements of DifferentialEquations.jl for a range 'times'
-    of time steps. The result is stroed as the 3D array 'trajectories' where the first index refers to the phase-space coor-
-    dinate, the second index marks the specific trajectory wihtin the ensemble and the third index is the time step; thus the
-    vector trajectories[:,i,j] are all coordinates of the i-th realisation in the ensemble at the j-th time step.
-    The keyword 'combined-sorting' returns the phase-space coordinates in combined sorting if set to 'true', otherwise the
-    phase-space arrays are sorted subsys wise (see Sorting_Coordinates.jl for more information about the sortation). The func-
-    tion returns the array 'trajectories' as well as a string marking the sorting of the phase-space coordinates.
+    Evolves an ensemble of initial points 'xpoints' (in subsystem sorting) according to the deter-
+    ministic equations of motion defined by 'EOM!' in accordance with the ODE problem and solver
+    requirements of DifferentialEquations.jl for a range 'times' of time steps. The result is stored
+    as the 3D array 'trajectories', where the first index refers to the phase-space coordinate, the
+    second index marks the specific trajectory within the ensemble, and the third index is the time
+    step; thus, the vector trajectories[:,i,j] contains all coordinates of the i-th realization in
+    the ensemble at the j-th time step. The keyword 'combined-sorting' returns the phase-space coor-
+    dinates in combined sorting if set to 'true'; otherwise, the phase-space arrays are sorted sub-
+    system-wise (see Sorting_Coordinates.jl for more information about the sorting). The function
+    returns the array 'trajectories' as well as a string marking the sorting of the phase-space coor-
+    dinates.
     Please check out the links
 
     https://github.com/SciML/DiffEqPhysics.jl/tree/master
@@ -155,8 +164,7 @@ module EvolveEnsemble
 
         # lock to prevent data race
         trajlock = ReentrantLock()
-
-        alg = EulerHeun() # gut für kurze Ketten bis N=3 und manchmal auch N=5
+        
         # compute trajectories in multi-threaded loop over init. points
         @threads for i in 1:n_traj
             pq = sortPhSpVector__subsys_to_combined(xpoints[:,i])
@@ -185,8 +193,6 @@ module EvolveEnsemble
         combined_sorting::Bool=true,
         kwargs...
         )
-        # alg = SKenCarp()
-        alg = EulerHeun() # gut für kurze Ketten bis N=3 und manchmal auch N=5
         dt = 0.1+(times[2]-times[1])
         pq = sortPhSpVector__subsys_to_combined(xpoint)
         prob = SDEProblem(Drift!, Diffusion!, pq, (first(times),last(times)))
